@@ -19,8 +19,10 @@ Updates your YDNS hosts. It is highly recommended to use this script with a cron
 
 2. Edit the script to include your YDNS API credentials, host(s), and the path to the local YDNS_LASTIP file (mandatory for cronjob only)
 
-3. Run the script: 	- Manually via the command line. Show options: -h
-			- Via cronjob for automatic execution (recommended)
+3. Run the script: 	
+
+- Manually via the command line. Show options: -h
+- Via cronjob for automatic execution (recommended)
 
 
 ## License:
