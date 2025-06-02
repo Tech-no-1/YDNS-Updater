@@ -1,38 +1,28 @@
-# YDNS Bash Updater Script
+# YDNS Updater Script
 
-This repository contains the bash updater script which can be used on *NIX-like environments to update dynamic hosts. It is recommended to use this script with cronjob to run periodically (preferrably every 15 minutes).
 
-The script uses the YDNS API v1 (dyn-compatible).
+Updates your YDNS hosts. It is highly recommended to use this script with a cronjob to run it automatically.
 
-## Installation
 
-First, ensure that your host has [curl](http://curl.haxx.se) installed.
+## What's new?
 
-1. Check out the source code (updater.sh)
-2. Place it into desired place and make it executable (`chmod +x updater.sh`)
-3. Edit the script and update the user and host information to fit your configuration
-4. Run the script (either by single call or set up a cronjob to run it periodically)
+- Support for current YDNS API
+- Support for IPv4 and IPv6 addresses 
+- Uses the Ipify API to retrieve public IP addresses
+- Revision of the usage options, output and YDNS_LASTIP file
+- Code cleanup, updates and fixes
 
-## Crontab Setup
 
-To run this script every 15 minutes using `crontab`, add the following line to your crontab list:
+## Installation:
 
-```bash
-*/15 * * * * /path/to/script/updater.sh > /dev/null
-```
+1. Place the script where you want it and make it executable (chmod +x updater.sh)
 
-Although this works on most all implementations of `crontab`, for more portability use this instead:
+2. Edit the script to include your YDNS API credentials, host(s), and the path to the local YDNS_LASTIP file (mandatory for cronjob only)
 
-```bash
-0,15,30,45 * * * * /path/to/script/updater.sh > /dev/null
-````
+3. Run the script:	-> Manually via the command line. Show options: -h
+			-> Via cronjob for automatic execution (recommended)
 
-**NOTE:** To gain access to the crontab list to edit and add entries, execute `crontab -e` at the terminal
 
-## Further notes
+## License:
 
 The code is licensed under the GNU Public License, version 3.
-
-## Contribution
-
-If you like to contribute useful changes to the script, simply fork the project, apply your changes and make a pull request.
