@@ -191,11 +191,11 @@ fi
 ## IPv4
 if [ -z "$current_ip4" ]; then
 	current_ip4=$(curl --silent https://api.ipify.org)
-	sleep 1
+	sleep 2
 
 	if [ -z "$current_ip4" ]; then
 		current_ip4=$(curl --silent https://api.ipify.org)
-      		sleep 1
+      		sleep 5
       	if [ -z "$current_ip4" ]; then
 		echo "Error: Unable to retrieve the current public IPv4 address."
         	exit 91
@@ -208,11 +208,11 @@ fi
 ##IPv6
 if [ -z "$current_ip6" ]; then
 	current_ip6=$(curl --silent https://api6.ipify.org)
-	sleep 1
+	sleep 2
 
 	if [ -z "$current_ip6" ]; then
 		current_ip6=$(curl --silent https://api6.ipify.org)
-		sleep 1
+		sleep 5
 	if [ -z "$current_ip6" ]; then
         	echo "Error: Unable to retrieve the current public IPv6 address."
         	exit 91
