@@ -86,7 +86,7 @@ update_ip4_address () {
 	retip4=
 
 	for host in $YDNS_HOST; do
-		retip4=$(curl -u "$USERNAME:$SECRET" -s https://ydns.io/api/v1/update/?host="${host}"\&ip="${current_ip4}")
+		retip4=$(curl --connect-timeout 5 --max-time 10 -u "$USERNAME:$SECRET" -s https://ydns.io/api/v1/update/?host="${host}"\&ip="${current_ip4}")
 	done
 
 # API response, from Marco Brandizi (https://github.com/marco-brandizi/ydns-updater)
@@ -98,7 +98,7 @@ update_ip6_address () {
         retip6=
 
   	for host in $YDNS_HOST; do
-		retip6=$(curl -u "$USERNAME:$SECRET" -s https://ydns.io/api/v1/update/?host="${host}"\&ip="${current_ip6}")
+		retip6=$(curl --connect-timeout 5 --max-time 10 -u "$USERNAME:$SECRET" -s https://ydns.io/api/v1/update/?host="${host}"\&ip="${current_ip6}")
   	done
 
   	echo "$retip6" | sed -E s/'^(.*)[[:space:]].*'/'\1'/
