@@ -32,11 +32,10 @@ USERNAME=""
 SECRET=""
 
 # List of hosts you want to update (you can update multiple hosts at once)
-# For a better readability/overview, please create a list as follows:
-# YDNS_HOST="
-# Host1
+# For a better readability/overview, it's recommended to create a list as follows:
+# YDNS_HOST="Host1
 # Host2
-# "
+# Host3"
 YDNS_HOST=""
 
 # Full path to your local YDNS_LASTIP file containing the last known public IP addresses of your system (optional)
@@ -49,13 +48,14 @@ YDNS_LASTIP_FILE=""
 ####################################
 
 
-YDNS_UPD_VERSION="2025.6.1"
+YDNS_UPD_VERSION="2025.6.2"
 
 # Check if curl is present
 command -v curl > /dev/null 2>&1
 curl_check=$?
 
 if [ "$curl_check" -ne 0 ]; then
+	echo ""
 	echo "Error: Curl is NOT present. Please install it, as it is required to run the script."
     	exit 1
 fi
@@ -86,9 +86,7 @@ update_ip4_address () {
 	retip4=
 
 	for host in $YDNS_HOST; do
-		retip4=$(curl -u "$USERNAME:$SECRET" \
-			--silent \
-			https://ydns.io/api/v1/update/?host="${host}"\&ip="${current_ip4}")
+		retip4=$(curl -u "$USERNAME:$SECRET" -s https://ydns.io/api/v1/update/?host="${host}"\&ip="${current_ip4}")
 	done
 
 # API response, from Marco Brandizi (https://github.com/marco-brandizi/ydns-updater)
@@ -100,9 +98,7 @@ update_ip6_address () {
         retip6=
 
   	for host in $YDNS_HOST; do
-		retip6=$(curl -u "$USERNAME:$SECRET" \
-      			--silent \
-      			https://ydns.io/api/v1/update/?host="${host}"\&ip="${current_ip6}")
+		retip6=$(curl -u "$USERNAME:$SECRET" -s https://ydns.io/api/v1/update/?host="${host}"\&ip="${current_ip6}")
   	done
 
   	echo "$retip6" | sed -E s/'^(.*)[[:space:]].*'/'\1'/
@@ -110,6 +106,7 @@ update_ip6_address () {
 
 ## Display version
 show_version () {
+	echo ""
 	echo "YDNS Updater version: $YDNS_UPD_VERSION"
 	exit 0
 }
@@ -161,16 +158,19 @@ fi
 
 # Check if YDNS credentials and host(s) are specified
 if [ -z "$USERNAME" ]; then
+	echo ""
 	echo "Error: YDNS API username missing"
     	exit 90
 fi
 
 if [ -z "$SECRET" ]; then
+	echo ""
     	echo "Error: YDNS API secret missing"
     	exit 90
 fi
 
 if [ -z "$YDNS_HOST" ]; then
+	echo ""
     	echo "Error: No YDNS host(s) specified"
     	exit 90
 fi
@@ -182,6 +182,7 @@ if [ -z "$YDNS_LASTIP_FILE" ]; then
 
 	if [ ! -e "$YDNS_LASTIP_FILE" ]; then
 		touch "$YDNS_LASTIP_FILE"
+		echo ""
 		echo "Info: A new YDNS_LASTIP file has been created in the current directory."
       		echo "This file contains the last known public IP addresses of your system."
     fi
@@ -190,35 +191,26 @@ fi
 ## Retrieve current public IP addresses from ipify
 ## IPv4
 if [ -z "$current_ip4" ]; then
-	current_ip4=$(curl --silent https://api.ipify.org)
-	sleep 2
+	current_ip4=$(curl --connect-timeout 5 --max-time 20 --retry-all-errors --retry-max-time 15 -s https://api.ipify.org)
 
-	if [ -z "$current_ip4" ]; then
-		current_ip4=$(curl --silent https://api.ipify.org)
-      		sleep 5
-      	if [ -z "$current_ip4" ]; then
-		echo "Error: Unable to retrieve the current public IPv4 address."
-        	exit 91
-      fi
-    fi
-
-    	echo "Current public IPv4 address: $current_ip4"
+		if [ -z "$current_ip4" ]; then
+		echo ""
+	  	echo "Error: Unable to retrieve the current public IPv4 address. API request failed or timed out"
+          	exit 91
+  fi
+	echo ""
+  	echo "Current public IPv4 address: $current_ip4"
 fi
 
 ##IPv6
 if [ -z "$current_ip6" ]; then
-	current_ip6=$(curl --silent https://api6.ipify.org)
-	sleep 2
+  	current_ip6=$(curl --connect-timeout 5 --max-time 20 --retry-all-errors --retry-max-time 15 -s https://api6.ipify.org)
 
-	if [ -z "$current_ip6" ]; then
-		current_ip6=$(curl --silent https://api6.ipify.org)
-		sleep 5
-	if [ -z "$current_ip6" ]; then
-        	echo "Error: Unable to retrieve the current public IPv6 address."
-        	exit 91
-      fi
-    fi
-
+		if [ -z "$current_ip6" ]; then
+		echo ""
+	  	echo "Error: Unable to retrieve the current public IPv6 address. API request failed or timed out"
+    		exit 91
+  fi
 	echo "Current public IPv6 address: $current_ip6"
 fi
 
@@ -242,19 +234,19 @@ if [ "$current_ip4" != "$last_ip4" ]; then
 	badauth)
 	echo ""
 	echo "IPv4 | YDNS host update failed for:"
-	echo ""
 	echo "$YDNS_HOST"
 	echo ""
 	echo "Authentication failed. Check your API username and secret."
+    	echo ""
     	;;
 
     	good)
     	echo ""
     	echo "IPv4 | YDNS host update successful for:"
-    	echo ""
 	echo "$YDNS_HOST"
     	echo ""
     	echo "New IPv4 address: $current_ip4"
+    	echo ""
 
     	echo "$current_ip4" > "$YDNS_LASTIP_FILE"
     	;;
@@ -262,10 +254,10 @@ if [ "$current_ip4" != "$last_ip4" ]; then
 	nochg)
     	echo ""
     	echo "IPv4 | YDNS API replied: No change for:"
-    	echo ""
 	echo "$YDNS_HOST"
     	echo ""
     	echo "-> IPv4 address unchanged"
+    	echo ""
 
     	echo "$current_ip4" > "$YDNS_LASTIP_FILE"
     	;;
@@ -273,10 +265,10 @@ if [ "$current_ip4" != "$last_ip4" ]; then
 	*)
     	echo ""
     	echo "IPv4 | YDNS host update failed for:"
-    	echo ""
 	echo "$YDNS_HOST"
     	echo ""
-    	echo "Error: $retip4"   	
+    	echo "Error: $retip4"
+    	echo ""   	
 	;;
 
 	esac
@@ -285,10 +277,10 @@ if [ "$current_ip4" != "$last_ip4" ]; then
 
 	echo ""
 	echo "Not updating YDNS host(s):"
-	echo ""
 	echo "$YDNS_HOST"
     	echo ""
     	echo "-> IPv4 address unchanged"
+    	echo ""
 fi
 
 if [ "$current_ip6" != "$last_ip6" ]; then
@@ -298,47 +290,43 @@ if [ "$current_ip6" != "$last_ip6" ]; then
 	case "$retip6" in
 
 	badauth)
-	echo ""
 	echo "IPv6 | YDNS host update failed for:"
-    	echo ""
 	echo "$YDNS_HOST"
     	echo ""
     	echo "Authentication failed. Check your API username and secret."
+    	echo ""
 
     	exit 92
     	;;
 
 	good)
-    	echo ""
     	echo "IPv6 | YDNS host update successful for:"
-    	echo ""
 	echo "$YDNS_HOST"
     	echo ""
     	echo "New IPv6 address: $current_ip6"
+    	echo ""
 
     	echo "$current_ip6" >> "$YDNS_LASTIP_FILE"
     	exit 0
     	;;
 
 	nochg)
-    	echo ""
     	echo "IPv6 | YDNS API replied: No change for:"
-    	echo ""
 	echo "$YDNS_HOST"
     	echo ""
     	echo "-> IPv6 address unchanged"
+    	echo ""
 
     	echo "$current_ip6" >> "$YDNS_LASTIP_FILE"
     	exit 0
     	;;
 
 	*)
-    	echo ""
     	echo "IPv6 | YDNS host update failed for:"
-    	echo ""
 	echo "$YDNS_HOST"
     	echo ""
     	echo "Error: $retip6"
+    	echo ""
 
 	exit 93
     	;;
@@ -347,11 +335,10 @@ if [ "$current_ip6" != "$last_ip6" ]; then
 
     	else
 
-	echo ""
     	echo "Not updating YDNS host(s):"
-    	echo ""
 	echo "$YDNS_HOST"
     	echo ""
     	echo "-> IPv6 address unchanged"
+    	echo ""
     	exit 0
 fi
