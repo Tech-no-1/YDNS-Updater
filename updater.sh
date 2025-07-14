@@ -48,7 +48,7 @@ YDNS_LASTIP_FILE=""
 ####################################
 
 
-YDNS_UPD_VERSION="2025.6.2"
+YDNS_UPD_VERSION="2025.7.1"
 
 # Check if curl is present
 command -v curl > /dev/null 2>&1
@@ -89,8 +89,8 @@ update_ip4_address () {
 		retip4=$(curl --connect-timeout 5 --max-time 10 -u "$USERNAME:$SECRET" -s https://ydns.io/api/v1/update/?host="${host}"\&ip="${current_ip4}")
 	done
 
-# API response, from Marco Brandizi (https://github.com/marco-brandizi/ydns-updater)
-	echo "$retip4" | sed -E s/'^(.*)[[:space:]].*'/'\1'/
+# API response
+	echo "$retip4" | sed -E 's/^([^[:space:]]+).*/\1/'
 }
 
 ## Function to update the IPv6 address
@@ -101,7 +101,7 @@ update_ip6_address () {
 		retip6=$(curl --connect-timeout 5 --max-time 10 -u "$USERNAME:$SECRET" -s https://ydns.io/api/v1/update/?host="${host}"\&ip="${current_ip6}")
   	done
 
-  	echo "$retip6" | sed -E s/'^(.*)[[:space:]].*'/'\1'/
+  	echo "$retip6" | sed -E 's/^([^[:space:]]+).*/\1/'
 }
 
 ## Display version
@@ -191,7 +191,7 @@ fi
 ## Retrieve current public IP addresses from ipify
 ## IPv4
 if [ -z "$current_ip4" ]; then
-	current_ip4=$(curl --connect-timeout 5 --max-time 20 --retry-all-errors --retry-max-time 15 -s https://api.ipify.org)
+	current_ip4=$(curl --connect-timeout 5 --max-time 15 --retry-all-errors --retry-max-time 10 -s https://api.ipify.org)
 
 		if [ -z "$current_ip4" ]; then
 		echo ""
@@ -204,7 +204,7 @@ fi
 
 ##IPv6
 if [ -z "$current_ip6" ]; then
-  	current_ip6=$(curl --connect-timeout 5 --max-time 20 --retry-all-errors --retry-max-time 15 -s https://api6.ipify.org)
+  	current_ip6=$(curl --connect-timeout 5 --max-time 15 --retry-all-errors --retry-max-time 10 -s https://api6.ipify.org)
 
 		if [ -z "$current_ip6" ]; then
 		echo ""
