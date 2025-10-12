@@ -63,25 +63,25 @@ fi
 
 # Usage/Help
 usage () {
-	echo ""
-	echo "  YDNS Updater - $YDNS_UPD_VERSION"
-	echo ""
-	echo "  Usage: $0 [options]"
-	echo ""
-	echo "  Available options are:"
-	echo ""
-	echo "  -h                          Display usage options"
-	echo "  -H HOST1,HOST2,HOST*        Your YDNS hosts to be updated separated by commas (no spaces!)"
-	echo "                              Use (\"Host1\",\"Host2\",\"Host*\") if you want to prevent globbing"
-	echo "  -u USERNAME                 Your YDNS API username (for authentication)"
-	echo "  -s SECRET                   Your YDNS API secret (for authentication)"
-	echo "  -l YDNS_LASTIP FILE PATH    Full path to your local YDNS_LASTIP file (optional)"
-	echo "  -v                          Display version"
-	echo ""
-	echo "  !! If you want to use this script in conjunction with a cronjob to run it automatically,"
-	echo "  !! please enter your personal YDNS data in the specified section at the top of the script"
-	echo ""
-	exit 0
+  echo ""
+  echo "  YDNS Updater - $YDNS_UPD_VERSION"
+  echo ""
+  echo "  Usage: $0 [options]"
+  echo ""
+  echo "  Available options are:"
+  echo ""
+  echo "  -h                          Display usage options"
+  echo "  -H HOST1,HOST2,HOST*        Your YDNS hosts to be updated separated by commas (no spaces!)"
+  echo "                              Use (\"Host1\",\"Host2\",\"Host*\") if you want to prevent globbing"
+  echo "  -u USERNAME                 Your YDNS API username (for authentication)"
+  echo "  -s SECRET                   Your YDNS API secret (for authentication)"
+  echo "  -l YDNS_LASTIP FILE PATH    Full path to your local YDNS_LASTIP file (optional)"
+  echo "  -v                          Display version"
+  echo ""
+  echo "  !! If you want to use this script in conjunction with a cronjob to run it automatically,"
+  echo "  !! please enter your personal YDNS data in the specified section at the top of the script"
+  echo ""
+  exit 0
 }
 
 # Update IP addresses
@@ -110,10 +110,10 @@ update_ip6_address () {
 
 # Display version
 show_version () {
-	echo ""
-	echo "YDNS Updater version: $YDNS_UPD_VERSION"
-	echo ""
-	exit 0
+  echo ""
+  echo "YDNS Updater version: $YDNS_UPD_VERSION"
+  echo ""
+  exit 0
 }
 
 custom_host=()
