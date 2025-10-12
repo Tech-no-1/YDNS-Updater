@@ -56,9 +56,9 @@ command -v curl > /dev/null 2>&1
 curl_check=$?
 
 if [ "$curl_check" -ne 0 ]; then
-	echo ""
-	echo "Error: Curl is NOT present. Please install it, as it is required to run the script."
-	exit 1
+  echo ""
+  echo "Error: Curl is NOT present. Please install it, as it is required to run the script."
+  exit 1
 fi
 
 # Usage/Help
@@ -154,7 +154,7 @@ while getopts "hH:l:s:u:v" opt 2>/dev/null; do
 
 # Custom Host
 if [ -n "${custom_host[*]}" ]; then
-	YDNS_HOST=("${custom_host[@]}")
+  YDNS_HOST=("${custom_host[@]}")
 fi
 
 # Check if YDNS credentials and host(s) are specified
@@ -178,7 +178,7 @@ fi
 
 # Check if YDNS_LASTIP file exists and create a new one if necessary
 if [ -z "$YDNS_LASTIP_FILE" ]; then
-	YDNS_LASTIP_FILE="$(pwd)/YDNS_LASTIP"
+  YDNS_LASTIP_FILE="$(pwd)/YDNS_LASTIP"
 fi
 
 if [ -f "$(pwd)/YDNS_LASTIP" ] && [ ! -f "$YDNS_LASTIP_FILE" ]; then
