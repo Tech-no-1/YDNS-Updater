@@ -159,19 +159,19 @@ fi
 
 # Check if YDNS credentials and host(s) are specified
 if [ -z "$USERNAME" ]; then
-	echo ""
-	echo "Error: YDNS API username missing."
+  echo ""
+  echo "Error: YDNS API username missing."
   exit 90
 fi
 
 if [ -z "$SECRET" ]; then
-	echo ""
+  echo ""
   echo "Error: YDNS API secret missing."
   exit 90
 fi
 
 if [ -z "${YDNS_HOST[*]}" ]; then
-	echo ""
+  echo ""
   echo "Error: No YDNS host(s) specified."
   exit 90
 fi
@@ -273,7 +273,7 @@ if [ -z "$last_ip4" ] || [ -z "$last_ip6" ] || [ "$last_host_count" -eq 0 ]; the
   last_ip4=""
   last_ip6=""
   last_host_count=0
-	echo ""
+  echo ""
   echo "Locally stored data is missing. Fallback to YDNS API call."
 fi
 
